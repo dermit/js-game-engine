@@ -1,0 +1,75 @@
+
+
+#wrapper {
+    margin:  0 auto;
+    width: 500px;
+    margin-top: 95px;
+    border-style: solid;
+    border-width: 5px;
+    border-color: black;
+}
+
+#leftWrapper {
+    float: left;
+    width: 200px;
+    margin-left: 200px;
+    margin-top:25px;
+}
+
+#stats {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    margin-top: 25px;
+}
+
+#instructions {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    margin-top: 25px;
+}
+
+#msg {
+    color: red;
+    font-size: 18px;
+    font-weight: bold;
+}
+#zmsg {
+    color: blue;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+#main td {
+    border: solid 1px silver;
+    width: 20px;
+    height: 20px;
+    background-color: #90ee90;
+}
+
+/* objects */
+#main td.plains { background-color: #90ee90; background: url('images/plain.png') no-repeat;}
+#main td.grass { background-color: green; background: url('images/grass.png') no-repeat;}
+#main td.trail { background-color: brown;}
+#main td.flower { background: url('images/flower.png') no-repeat;}
+#main td.rock { background-color: #90ee90; background: url('images/rock.png') no-repeat;}
+
+/* player */
+#main td.playerNorth { background: url('images/playerNORTH.png') no-repeat;}
+#main td.playerEast { background: url('images/playerEAST.png') no-repeat;}
+#main td.playerSouth { background: url('images/playerSOUTH.png') no-repeat;}
+#main td.playerWest { background: url('images/playerWEST.png') no-repeat;}
+
+/* zombie */
+#main td.zombie {background:  url('images/zombie.png') no-repeat;}
+
+
+/* testing */
+#main td.attack { background-image: linear-gradient(top left, red, rgba(255,0,0,0));}
+#main td.target { background-color: orange; opacity: 0.3; border:  solid 1px black;}
+#main td.red { background-color: red; opacity: 0.5;}
+#main td.fog { background-color: gray;}
+
+
+
