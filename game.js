@@ -5,6 +5,8 @@
  * Time: 5:11 AM
  */
 
+//test
+
 // global variables
 var BOARD_ROW_LENGTH = 20;
 var BOARD_COL_LENGTH = 20;
