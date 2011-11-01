@@ -13,6 +13,7 @@
 
 <div id="leftWrapper">
     <div id="stats">
+        HP: <span id="hp"></span> / <span id="maxhp"></span><br>
         Flowers: <span id="flowers">0</span><br>
         Steps Taken: <span id="steps">0</span><br>
         Stones Moved: <span id="stonesMoved">0</span><br>
@@ -33,6 +34,9 @@
         <span id="msg"></span>
         <br />
         <span id="zmsg"></span>
+
+        <br /><br />
+        <span id="dead">YOU ARE DEEEEEEEEEEEEEEEEEADDD!</span>
 
     </div>
 </div>

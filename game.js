@@ -3,7 +3,6 @@
  * User: inpho
  * Date: 10/2/11
  * Time: 5:11 AM
- * testing
  */
 
 //test
@@ -42,7 +41,7 @@ function keyDown(e) {
         player.dropItem("flower");
     }
 
-    // move north 'w'
+    // 'w'
     if(e.keyCode == 87)
     {
     }
@@ -130,23 +129,31 @@ function keyDown(e) {
 // player class
 function Player()
 {
-    var xloc, yloc, direction, steps, stonesMoved, flowers;
+    var xloc, yloc, direction, steps, stonesMoved, flowers, isAlive, hp, maxhp;
 
-    // initilize player, set all values to default, place player
+    // initialize player, set all values to default, place player
     this.init = function()
     {
-        this.steps       = 0;
-        this.stonesMoved = 0;
-        this.flowers     = 0;
+        // player vitals
+        this.maxhp       = 100;
+        this.hp          = this.maxhp;
+        this.isAlive     = true;
         this.xloc        = 0;
         this.yloc        = 0;
         this.direction   = 1;
+
+        // player stats
+        this.steps       = 0;
+        this.stonesMoved = 0;
+
+        // player inventory
+        this.flowers     = 0;
 
         // place player on map randomly
         this.spawnPlayer();
     };
 
-    // set player on a random spot
+    // set player on a random spot on the board
     this.spawnPlayer = function()
     {
          // randomly get a x and y location
@@ -215,6 +222,17 @@ function Player()
         }             
     };
 
+    this.takeDamage = function(amount)
+    {
+        var damageToTake = amount;
+
+        this.hp -= damageToTake;
+        if(this.hp <= 0)
+        {
+            this.isAlive = false;
+        }
+    };
+
     // jumps char
     this.jump = function(direction)
     {
@@ -242,9 +260,31 @@ function Player()
         }
     };
 
+    // function to check if user is dead
+    // returns true if dead
+    this.isDead = function()
+    {
+        if(!this.isAlive)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    };
+
     // move player & trigger all other actions
     this.move = function(direction)
     {
+        // since move is the only thing being called all the time,
+        // check if player is dead from here
+        if(this.isDead())
+        {
+            var dead = document.getElementById("dead");
+            dead.style.display = "block";
+        }
+
         var x = player.xloc;
         var y = player.yloc;
 
@@ -253,6 +293,13 @@ function Player()
         {
             // if true return without moving player
             return;
+        }
+
+        // check for zombie
+        if(checkForItem(x, y, direction, ("zombie" || "zombie1"), 1))
+        {
+            sendZombieMsg("YUMM YUMMMMMM");
+            this.takeDamage(25);
         }
 
         // check for flower
@@ -1022,7 +1069,12 @@ function initBoard(BOARD_ROW_LENGTH, BOARD_COL_LENGTH)
 function displayStats()
 {
     //var main = document.getElementById("stats");
+    var hp = document.getElementById("hp");
+    var maxhp = document.getElementById("maxhp");
 
+    hp.innerHTML = player.hp;
+    maxhp.innerHTML = player.maxhp;
+    
     var flower = document.getElementById("flowers");
     flower.innerHTML = player.flowers;
 
