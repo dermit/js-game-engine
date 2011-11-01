@@ -20,6 +20,8 @@ var WEST  = 4;
 // stores all the cells
 var cells;
 
+////////////////////////////
+
 // for key presses
 var keys = new Array();
 window.addEventListener('keydown', keyDown, true);
