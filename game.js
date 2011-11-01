@@ -283,6 +283,14 @@ function Player()
         {
             var dead = document.getElementById("dead");
             dead.style.display = "block";
+
+            //var spec = new Array();
+
+            //spec['flowers']     = this.flowers;
+            //spec['stonesMoved'] = this.stonesMoved;
+            //spec['stepsTaken']  = this.steps;
+
+            window.location = "dead.php";
         }
 
         var x = player.xloc;
