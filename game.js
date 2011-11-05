@@ -11,6 +11,10 @@
 var BOARD_ROW_LENGTH = 20;
 var BOARD_COL_LENGTH = 20;
 
+var NUM_OF_ENEMIES = 3;
+
+var zombies = {};
+
 // directionals
 var NORTH = 1;
 var EAST  = 2;
@@ -54,6 +58,18 @@ function keyDown(e) {
 	{
 		player.move(NORTH);
 
+        for(x = 0; x < zombies.length; x++)
+        {
+            zombies[x].changeFacingDirection();
+            zombies[x].move();
+
+            if(zombies[x].getVision())
+            {
+                zombies[x].move();
+            }
+        }
+
+        /*
         zombie.changeFacingDirection();
         zombie.move();
         if(zombie.getVision())
@@ -67,6 +83,7 @@ function keyDown(e) {
         {
             zombie1.move();
         }
+        */
     }
     // left arrow to move left
     if(e.keyCode == 37)
@@ -338,7 +355,6 @@ function Player()
         displayStats();
         checkForGrowth();
         isCellEmpty(direction, 2);
-
 
         // update players total steps
         this.updatePlayerSteps();
@@ -1052,8 +1068,8 @@ function Terrain()
 // declare global objects
 var player  = new Player();
 var terrain = new Terrain();
-var zombie  = new Zombie();
-var zombie1 = new Zombie();
+//var zombie  = new Zombie();
+//var zombie1 = new Zombie();
 
 
 function initBoard(BOARD_ROW_LENGTH, BOARD_COL_LENGTH)
@@ -1363,8 +1379,15 @@ $(document).ready(function() {
    terrain.placeRandomStone();
 
    // place zombies
-   zombie.init();
-   zombie1.init();
+   for (x = 0; x <= NUM_OF_ENEMIES; x++)
+   {
+        zombies[x] = new Zombie();
+        zombies[x].init();
+   }
+
+   //zombie.init();
+   //zombie1.init();
+
 
 
    // initialize player
