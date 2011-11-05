@@ -11,8 +11,10 @@
 var BOARD_ROW_LENGTH = 20;
 var BOARD_COL_LENGTH = 20;
 
-var NUM_OF_ENEMIES = 3;
+// number of starting enemies
+var NUM_OF_ENEMIES = 5;
 
+// zombies container
 var zombies = {};
 
 // directionals
@@ -58,50 +60,21 @@ function keyDown(e) {
 	{
 		player.move(NORTH);
 
-        for(x = 0; x < zombies.length; x++)
+        for(var x in zombies)
         {
-            zombies[x].changeFacingDirection();
-            zombies[x].move();
-
-            if(zombies[x].getVision())
-            {
-                zombies[x].move();
-            }
+            zombies[x].updateZombies();
+            x++;
         }
-
-        /*
-        zombie.changeFacingDirection();
-        zombie.move();
-        if(zombie.getVision())
-        {
-            zombie.move();
-        }
-
-        zombie1.changeFacingDirection();
-        zombie1.move();
-        if(zombie1.getVision())
-        {
-            zombie1.move();
-        }
-        */
     }
     // left arrow to move left
     if(e.keyCode == 37)
     {
         player.move(WEST);
 
-        zombie.changeFacingDirection();
-        zombie.move();
-        if(zombie.getVision())
+        for(var x in zombies)
         {
-           zombie.move();
-        }
-
-        zombie1.changeFacingDirection();
-        zombie1.move();
-        if(zombie1.getVision())
-        {
-            zombie1.move();
+            zombies[x].updateZombies();
+            x++;
         }
     }
     // down arrow to move down
@@ -109,18 +82,10 @@ function keyDown(e) {
     {
         player.move(SOUTH);
 
-        zombie.changeFacingDirection();
-        zombie.move();
-        if(zombie.getVision())
+        for(var x in zombies)
         {
-            zombie.move();
-        }
-
-        zombie1.changeFacingDirection();
-        zombie1.move();
-        if(zombie1.getVision())
-        {
-            zombie1.move();
+            zombies[x].updateZombies();
+            x++;
         }
     }
     // right arrow to move right
@@ -128,18 +93,10 @@ function keyDown(e) {
     {
         player.move(EAST);
 
-        zombie.changeFacingDirection();
-        zombie.move();
-        if(zombie.getVision())
+        for(var x in zombies)
         {
-            zombie.move();
-        }
-
-        zombie1.changeFacingDirection();
-        zombie1.move();
-        if(zombie1.getVision())
-        {
-            zombie1.move();
+            zombies[x].updateZombies();
+            x++;
         }
     }
 }
@@ -512,7 +469,7 @@ function Zombie()
     {
         this.changeFacingDirection();
         this.move();
-        this.clearVisionTiles();
+        //this.clearVisionTiles();
     };
 
 
@@ -1378,7 +1335,7 @@ $(document).ready(function() {
    terrain.placeRandomGrass();
    terrain.placeRandomStone();
 
-   // place zombies
+   // generate and place zombies
    for (x = 0; x <= NUM_OF_ENEMIES; x++)
    {
         zombies[x] = new Zombie();
@@ -1387,8 +1344,6 @@ $(document).ready(function() {
 
    //zombie.init();
    //zombie1.init();
-
-
 
    // initialize player
    player.init();
