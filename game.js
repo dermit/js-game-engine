@@ -21,8 +21,9 @@ var zombies = {};
 var playSound = {
     hitRock  : new Audio("sounds/hitrock.wav"),
     jump     : new Audio("sounds/jump.wav"),
-    pushRock : new Audio("sounds/pushrock.wav")
-    
+    pushRock : new Audio("sounds/pushrock.wav"),
+    hitzombie: new Audio("sounds/hitzombie.wav")
+   
 };
 
 // directionals
@@ -364,28 +365,66 @@ function Player()
             var direction = player.direction;
 
             if(checkForWall(x, y, direction, 1))
+            {
+                sendMsg("Can't hit a wall with your sword");
+                return;
+            }
+
+            // check for flower
+            if(checkForItem(x, y, direction, "flower", 1))
+            {
+                var cell = getNextCell(x, y, direction);
+                cell[0].className = "plains";
+                sendMsg("You destory a flower");
+                return;
+            }
+
+            // check for rock
+            if(checkForItem(x, y, direction, "rock", 1))
+            {
+                playSound.hitRock.play();
+                sendMsg("You hit a rock with your sword");
+                return;
+            }
+
+            // check for zombie
+            if(checkForItem(x, y, direction, "zombie", 1))
+            {
+                if(direction == NORTH)
                 {
-                    sendMsg("Can't hit a wall with your sword");
-                    return;
+                    var zy = y - 1;
+                }
+                else if(direction == EAST)
+                {
+                    var zx = x + 1;
+                }
+                else if(direction == SOUTH)
+                {
+                    var zy = y + 1;
+                }
+                else if(direction == WEST)
+                {
+                    var zx = x - 1;
                 }
 
-                // check for flower
-                if(checkForItem(x, y, direction, "flower", 1))
+                for(var zombie in zombies)
                 {
-                    var cell = getNextCell(x, y, direction);
-                    cell[0].className = "plains";
-                    sendMsg("You destory a flower");
-                    return;
+                    if((zombies[zombie].yloc == zy && zombies[zombie].xloc == x) || (zombies[zombie].xloc == zx && zombies[zombie].yloc == y))
+                    {
+                        // hit zombie sound
+                        playSound.hitzombie.play();
+
+                        delete zombies[zombie];
+
+                        sendMsg("You killed a zombie.");
+
+                        var cell = getNextCell(x, y, direction);
+                        cell[0].className = "plains";
+                    }
                 }
 
-                // check for rock
-                if(checkForItem(x, y, direction, "rock", 1))
-                {
-                    playSound.hitRock.play();
-                    sendMsg("You hit a rock with your sword");
-                    return;
-                }
-
+                return;
+            }
         }
         else
         {
@@ -476,7 +515,11 @@ function Player()
 // monster class
 function Zombie()
 {
-    var xloc, yloc, direction;
+    var xloc;
+    var yloc;
+    var direction;
+
+    //var image = 'zombie';
 
     // initilize zombie, set all values to default, place zombie
     this.init = function()
