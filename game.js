@@ -17,6 +17,12 @@ var NUM_OF_ENEMIES = 5;
 // zombies container
 var zombies = {};
 
+// sounds object
+var sounds = {
+    hitRock : new Audio("hitrock.wav")
+    
+};
+
 // directionals
 var NORTH = 1;
 var EAST  = 2;
@@ -52,6 +58,7 @@ function keyDown(e) {
     // 'w'
     if(e.keyCode == 87)
     {
+        player.attack();
     }
 
     
@@ -63,7 +70,6 @@ function keyDown(e) {
         for(var x in zombies)
         {
             zombies[x].updateZombies();
-            x++;
         }
     }
     // left arrow to move left
@@ -74,7 +80,6 @@ function keyDown(e) {
         for(var x in zombies)
         {
             zombies[x].updateZombies();
-            x++;
         }
     }
     // down arrow to move down
@@ -85,7 +90,6 @@ function keyDown(e) {
         for(var x in zombies)
         {
             zombies[x].updateZombies();
-            x++;
         }
     }
     // right arrow to move right
@@ -96,7 +100,6 @@ function keyDown(e) {
         for(var x in zombies)
         {
             zombies[x].updateZombies();
-            x++;
         }
     }
 }
@@ -105,7 +108,18 @@ function keyDown(e) {
 // player class
 function Player()
 {
-    var xloc, yloc, direction, steps, stonesMoved, flowers, isAlive, hp, maxhp;
+    var xloc;
+    var yloc;
+    var direction;
+    var isAlive;
+    var hp;
+    var maxhp;
+
+    var steps;
+    var stonesMoved;
+    var flowers;
+
+    var sword;
 
     // initialize player, set all values to default, place player
     this.init = function()
@@ -124,6 +138,9 @@ function Player()
 
         // player inventory
         this.flowers     = 0;
+
+        // player weapons
+        this.sword       = true;
 
         // place player on map randomly
         this.spawnPlayer();
@@ -329,6 +346,46 @@ function Player()
         cell[0].className = this.setPlayerDirectionImage(direction);
 
         //clearMsg();
+
+    };
+
+
+    this.attack = function()
+    {
+        if(this.sword)
+        {
+            var x = player.xloc;
+            var y = player.yloc;
+            var direction = player.direction;
+
+            if(checkForWall(x, y, direction, 1))
+                {
+                    sendMsg("Can't hit a wall with your sword");
+                    return;
+                }
+
+                // check for flower
+                if(checkForItem(x, y, direction, "flower", 1))
+                {
+                    var cell = getNextCell(x, y, direction);
+                    cell[0].className = "plain";
+                    sendMsg("You destory a flower");
+                    return;
+                }
+
+                // check for rock
+                if(checkForItem(x, y, direction, "rock", 1))
+                {
+                    sounds.hitRock.play();
+                    sendMsg("You hit a rock with your sword");
+                    return;
+                }
+
+        }
+        else
+        {
+            sendMsg("You dont have a sword");
+        }
 
     };
 
@@ -1021,12 +1078,9 @@ function Terrain()
     
 }
 
-
-// declare global objects
+// Init global objects
 var player  = new Player();
 var terrain = new Terrain();
-//var zombie  = new Zombie();
-//var zombie1 = new Zombie();
 
 
 function initBoard(BOARD_ROW_LENGTH, BOARD_COL_LENGTH)
