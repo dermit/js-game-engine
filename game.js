@@ -15,7 +15,7 @@ var BOARD_COL_LENGTH = 20;
 var NUM_OF_ENEMIES = 5;
 
 // zombies container
-var zombies = {};
+var zombies = new Array();
 
 // sounds object
 var playSound = {
@@ -70,7 +70,8 @@ function keyDown(e) {
 	{
 		player.move(NORTH);
 
-        for(var x in zombies)
+        //for(var x in zombies)
+        for(var x=0;x<=zombies.length;x++)
         {
             zombies[x].updateZombies();
         }
@@ -80,7 +81,7 @@ function keyDown(e) {
     {
         player.move(WEST);
 
-        for(var x in zombies)
+        for(var x=0;x<=zombies.length;x++)
         {
             zombies[x].updateZombies();
         }
@@ -90,7 +91,7 @@ function keyDown(e) {
     {
         player.move(SOUTH);
 
-        for(var x in zombies)
+        for(var x=0;x<=zombies.length;x++)
         {
             zombies[x].updateZombies();
         }
@@ -100,7 +101,7 @@ function keyDown(e) {
     {
         player.move(EAST);
 
-        for(var x in zombies)
+        for(var x=0;x<=zombies.length;x++)
         {
             zombies[x].updateZombies();
         }
@@ -407,17 +408,20 @@ function Player()
                     var zx = x - 1;
                 }
 
-                for(var zombie in zombies)
+                for(var zombie=0; zombie<=zombies.length; zombie++)
                 {
                     if((zombies[zombie].yloc == zy && zombies[zombie].xloc == x) || (zombies[zombie].xloc == zx && zombies[zombie].yloc == y))
                     {
                         // hit zombie sound
                         playSound.hitzombie.play();
 
-                        delete zombies[zombie];
+                        // remove zombie from array
+                        zombies.splice(zombie, 1);
 
+                        // send msg
                         sendMsg("You killed a zombie.");
 
+                        // replace zombie with plains tile
                         var cell = getNextCell(x, y, direction);
                         cell[0].className = "plains";
                     }
@@ -593,21 +597,36 @@ function Zombie()
 
     this.spawnNewZombie = function()
     {
-        var chanceToSpawn = .005;
+        var chanceToSpawn = .05;
         var roll = Math.random();
 
-        console.log(zombies);
+        //console.log(zombies);
 
         if(roll < chanceToSpawn)
         {
-            var x = this.countZombies();
-            console.log(x);
-            x++;
-            zombies[x] = new Zombie();
-            zombies[x].init();
+            zombies.push(new Zombie());
 
+            var last = zombies.length-1;
+
+            zombies[last].init();
+            //zombies[count].length.init();
+
+            // remove zombie from array
+            //zombies.splice(zombie, 1);
+
+            // send msg
+            sendMsg("A Zombie has spawned!");
+
+            // replace zombie with plains tile
+            //var cell = getNextCell(x, y, direction);
+            //cell[0].className = "plains";
+
+            //var x = zombies.length;
+            //x++;
+            //zombies[x] = new Zombie();
+            //zombies[x].init();
+            //zombies.push(new Zombie());
         }
-
     };
 
 
