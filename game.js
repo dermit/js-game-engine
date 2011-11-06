@@ -18,8 +18,10 @@ var NUM_OF_ENEMIES = 5;
 var zombies = {};
 
 // sounds object
-var sounds = {
-    hitRock : new Audio("hitrock.wav")
+var playSound = {
+    hitRock  : new Audio("sounds/hitrock.wav"),
+    jump     : new Audio("sounds/jump.wav"),
+    pushRock : new Audio("sounds/pushrock.wav")
     
 };
 
@@ -234,6 +236,9 @@ function Player()
 
         if(isCellEmpty(direction, 2))
         {
+            // play jump sound
+            playSound.jump.play();
+
             // update current cell with plains tile
             var oldCell = getCell(x, y);
             oldCell[0].className = 'plains';
@@ -368,7 +373,7 @@ function Player()
                 if(checkForItem(x, y, direction, "flower", 1))
                 {
                     var cell = getNextCell(x, y, direction);
-                    cell[0].className = "plain";
+                    cell[0].className = "plains";
                     sendMsg("You destory a flower");
                     return;
                 }
@@ -376,7 +381,7 @@ function Player()
                 // check for rock
                 if(checkForItem(x, y, direction, "rock", 1))
                 {
-                    sounds.hitRock.play();
+                    playSound.hitRock.play();
                     sendMsg("You hit a rock with your sword");
                     return;
                 }
@@ -1323,6 +1328,9 @@ function moveRock(x, y, direction)
     }
     else
     {
+        // play pushrock sound
+        playSound.pushRock.play();
+
         var oldRockCell = getCell(x, y);
         oldRockCell[0].className = "trail";
 
