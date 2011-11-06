@@ -569,12 +569,45 @@ function Zombie()
         }
     };
 
+    this.countZombies = function()
+    {
+        var c = 0;
+
+        for(var z in zombies)
+        {
+            ++c;
+        }
+
+        return c;
+    };
+
     // not currently used
     this.updateZombies = function()
     {
         this.changeFacingDirection();
         this.move();
+
+        this.spawnNewZombie();
         //this.clearVisionTiles();
+    };
+
+    this.spawnNewZombie = function()
+    {
+        var chanceToSpawn = .005;
+        var roll = Math.random();
+
+        console.log(zombies);
+
+        if(roll < chanceToSpawn)
+        {
+            var x = this.countZombies();
+            console.log(x);
+            x++;
+            zombies[x] = new Zombie();
+            zombies[x].init();
+
+        }
+
     };
 
 
