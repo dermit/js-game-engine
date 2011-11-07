@@ -31,6 +31,8 @@
         "p" to plant a flower<br>
 
         <br><br>
+        <button id="sound" onclick="turnSound()">Sound on/off</button><br>
+        <button id="debug" onclick="turnDebug()">Debug on/off</button>
         <span id="msg"></span>
         <br />
         <span id="zmsg"></span>
@@ -43,7 +45,10 @@
 
 <div id="wrapper">
     <table id="main"></table>
-    <table id="fog"></table>
+</div>
+
+<div id="rightWrapper">
+  <textarea rows="25" cols="50" readonly id="textLog"></textarea>
 </div>
 
 

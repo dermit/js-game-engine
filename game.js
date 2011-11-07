@@ -11,6 +11,10 @@
 var BOARD_ROW_LENGTH = 20;
 var BOARD_COL_LENGTH = 20;
 
+// options
+var SOUND = false;
+var DEBUG = false;
+
 // number of starting enemies
 var NUM_OF_ENEMIES = 5;
 
@@ -23,7 +27,6 @@ var playSound = {
     jump     : new Audio("sounds/jump.wav"),
     pushRock : new Audio("sounds/pushrock.wav"),
     hitzombie: new Audio("sounds/hitzombie.wav")
-   
 };
 
 // directionals
@@ -239,7 +242,10 @@ function Player()
         if(isCellEmpty(direction, 2))
         {
             // play jump sound
-            playSound.jump.play();
+            if(SOUND)
+            {
+                playSound.jump.play();
+            }
 
             // update current cell with plains tile
             var oldCell = getCell(x, y);
@@ -255,7 +261,7 @@ function Player()
         }
         else
         {
-            sendMsg("Cannot jump, cell is not empty");
+            sendMsg("Cannot jump, something is in your way", "event");
             return;
         }
     };
@@ -283,13 +289,7 @@ function Player()
         {
             var dead = document.getElementById("dead");
             dead.style.display = "block";
-
-            //var spec = new Array();
-
-            //spec['flowers']     = this.flowers;
-            //spec['stonesMoved'] = this.stonesMoved;
-            //spec['stepsTaken']  = this.steps;
-
+          
             window.location = "dead.php";
         }
 
@@ -301,13 +301,6 @@ function Player()
         {
             // if true return without moving player
             return;
-        }
-
-        // check for zombie
-        if(checkForItem(x, y, direction, ("zombie" || "zombie1"), 1))
-        {
-            sendZombieMsg("YUMM YUMMMMMM");
-            this.takeDamage(25);
         }
 
         // check for flower
@@ -322,12 +315,15 @@ function Player()
             // push rock
             if(moveRock(x, y, direction))
             {
-                // increment stone pushed
                 this.incrementItem("rock");
             }
             else
             {
                 // cant move rock due to obstruction
+                if(DEBUG)
+                {
+                    sendMsg("Can't move rock due to obstruction", "event");
+                }
                 return;
             }
         }
@@ -367,7 +363,7 @@ function Player()
 
             if(checkForWall(x, y, direction, 1))
             {
-                sendMsg("Can't hit a wall with your sword");
+                sendMsg("You hit a wall with your sword", "player");
                 return;
             }
 
@@ -376,15 +372,19 @@ function Player()
             {
                 var cell = getNextCell(x, y, direction);
                 cell[0].className = "plains";
-                sendMsg("You destory a flower");
+                sendMsg("You destroyed a flower", "player");
                 return;
             }
 
             // check for rock
             if(checkForItem(x, y, direction, "rock", 1))
             {
-                playSound.hitRock.play();
-                sendMsg("You hit a rock with your sword");
+                if(SOUND)
+                {
+                    playSound.hitRock.play();
+                }
+                
+                sendMsg("You hit a rock with your sword", "player");
                 return;
             }
 
@@ -413,13 +413,16 @@ function Player()
                     if((zombies[zombie].yloc == zy && zombies[zombie].xloc == x) || (zombies[zombie].xloc == zx && zombies[zombie].yloc == y))
                     {
                         // hit zombie sound
-                        playSound.hitzombie.play();
+                        if(SOUND)
+                        {
+                            playSound.hitzombie.play();
+                        }
 
                         // remove zombie from array
                         zombies.splice(zombie, 1);
 
                         // send msg
-                        sendMsg("You killed a zombie.");
+                        sendMsg("You killed a zombie.", "event");
 
                         // replace zombie with plains tile
                         var cell = getNextCell(x, y, direction);
@@ -432,7 +435,7 @@ function Player()
         }
         else
         {
-            sendMsg("You dont have a sword");
+            sendMsg("You dont have a sword", "event");
         }
 
     };
@@ -452,21 +455,21 @@ function Player()
                 // check for wall
                 if(checkForWall(x, y, direction, 1))
                 {
-                    sendMsg("Can't plant a flower, wall in the way");
+                    sendMsg("Can't plant a flower, wall in the way", "event");
                     return;
                 }
 
                 // check for flower
                 if(checkForItem(x, y, direction, "flower", 1))
                 {
-                    sendMsg("Already a flower there");
+                    sendMsg("Already a flower there", "event");
                     return;
                 }
 
                 // check for rock
                 if(checkForItem(x, y, direction, "rock", 1))
                 {
-                    sendMsg("A rock is in the way");
+                    sendMsg("A rock is in the way", "event");
                     return;
                 }
 
@@ -478,12 +481,12 @@ function Player()
                 this.decrementItem("flower");
 
                 // send msg
-                sendMsg("Planted a flower");
+                sendMsg("You planted a flower", "player");
             }
             else
             {
                 // not enough flowers
-                sendMsg("You dont have enough flowers to drop one");
+                sendMsg("You don't have a flower", "player");
                 return;
             }
         }
@@ -522,8 +525,6 @@ function Zombie()
     var xloc;
     var yloc;
     var direction;
-
-    //var image = 'zombie';
 
     // initilize zombie, set all values to default, place zombie
     this.init = function()
@@ -573,18 +574,6 @@ function Zombie()
         }
     };
 
-    this.countZombies = function()
-    {
-        var c = 0;
-
-        for(var z in zombies)
-        {
-            ++c;
-        }
-
-        return c;
-    };
-
     // not currently used
     this.updateZombies = function()
     {
@@ -597,35 +586,17 @@ function Zombie()
 
     this.spawnNewZombie = function()
     {
-        var chanceToSpawn = .05;
+        var chanceToSpawn = .01;
         var roll = Math.random();
-
-        //console.log(zombies);
 
         if(roll < chanceToSpawn)
         {
             zombies.push(new Zombie());
 
             var last = zombies.length-1;
-
             zombies[last].init();
-            //zombies[count].length.init();
 
-            // remove zombie from array
-            //zombies.splice(zombie, 1);
-
-            // send msg
-            sendMsg("A Zombie has spawned!");
-
-            // replace zombie with plains tile
-            //var cell = getNextCell(x, y, direction);
-            //cell[0].className = "plains";
-
-            //var x = zombies.length;
-            //x++;
-            //zombies[x] = new Zombie();
-            //zombies[x].init();
-            //zombies.push(new Zombie());
+            sendMsg("A Zombie has spawned!", "event");
         }
     };
 
@@ -653,28 +624,41 @@ function Zombie()
 
             if(newDirection == 1)
             {
-                console.log("changing directino to north");
+                if(DEBUG)
+                {
+                    sendMsg("zombie " + this + " is changing direction to north", "debug");
+                }
+
                 this.updateZombieDirection(NORTH);
                 return;
-                //return NORTH;
             }
             if(newDirection == 2)
             {
-                console.log("changing directino to east");
+                if(DEBUG)
+                {
+                    sendMsg("zombie " + this + " is changing direction to east", "debug");
+                }
+
                 this.updateZombieDirection(EAST);
                 return;
-                 //return EAST;
             }
             if(newDirection == 3)
             {
-                console.log("changing direction to south");
+                if(DEBUG)
+                {
+                    sendMsg("zombie " + this + " is changing direction to south", "debug");
+                }
+
                 this.updateZombieDirection(SOUTH);
                 return;
-                //return SOUTH;
             }
             if(newDirection == 4)
             {
-                console.log("changinge direction to west");
+                if(DEBUG)
+                {
+                    sendMsg("zombie " + this + " is changing direction to west", "debug");
+                }
+
                 this.updateZombieDirection(WEST);
                 return;
             }
@@ -687,8 +671,6 @@ function Zombie()
         var x = this.xloc;
         var y = this.yloc;
         var direction = this.direction;
-
-        var zombie = document.getElementById("zmsg");
         
         if(direction == NORTH)
         {
@@ -931,28 +913,28 @@ function Zombie()
         var cell1 = getCell(x1, y1);
         if(cell1[0].className == 'playerNorth' || cell1[0].className == 'playerEast' || cell1[0].className == 'playerSouth' || cell1[0].className == 'playerWest')
         {
-           zombie.innerHTML = "BRAINNZZZZ....";
+           sendMsg("BRAINNZZZZ....", "zombie");
            return true;
         }
 
         var cell2 = getCell(x2, y2);
         if(cell2[0].className == 'playerNorth' || cell2[0].className == 'playerEast' || cell2[0].className == 'playerSouth' || cell2[0].className == 'playerWest')
         {
-           zombie.innerHTML = "mmm..BRAINZZZ..";
+           sendMsg("mmm..BRAINZZZ..", "zombie");
            return true;
         }
 
         var cell3 = getCell(x3, y3);
         if(cell3[0].className == 'playerNorth' || cell3[0].className == 'playerEast' || cell3[0].className == 'playerSouth' || cell3[0].className == 'playerWest')
         {
-           zombie.innerHTML = "hungrreee...";
+           sendMsg("hungrreee...", "zombie");
            return true;
         }
 
         var cell4 = getCell(x4, y4);
         if(cell4[0].className == 'playerNorth' || cell4[0].className == 'playerEast' || cell4[0].className == 'playerSouth' || cell4[0].className == 'playerWest')
         {
-           zombie.innerHTML = "gaahhhh..";
+           sendMsg("gaahhhh..", "zombie");
            return true;
 
         }
@@ -960,28 +942,28 @@ function Zombie()
         var cell5 = getCell(x5, y5);
         if(cell5[0].className == 'playerNorth' || cell5[0].className == 'playerEast' || cell5[0].className == 'playerSouth' || cell5[0].className == 'playerWest')
         {
-           zombie.innerHTML = "*chomp chomp*..";
+           sendMsg("*chomp chomp*..", "zombie");
            return true;
         }
 
         var cell6 = getCell(x6, y6);
         if(cell6[0].className == 'playerNorth' || cell6[0].className == 'playerEast' || cell6[0].className == 'playerSouth' || cell6[0].className == 'playerWest')
         {
-           zombie.innerHTML = "....";
+           sendMsg("....", "zombie");
            return true;
         }
 
         var cell7 = getCell(x7, y7);
         if(cell7[0].className == 'playerNorth' || cell7[0].className == 'playerEast' || cell7[0].className == 'playerSouth' || cell7[0].className == 'playerWest')
         {
-           zombie.innerHTML = "BRAINszz.";
+           sendMsg("BRAINszz.", "zombie");
            return true;
         }
 
         var cell8 = getCell(x8, y8);
         if(cell8[0].className == 'playerNorth' || cell8[0].className == 'playerEast' || cell8[0].className == 'playerSouth' || cell8[0].className == 'playerWest')
         {
-           zombie.innerHTML = "HUMANSS";
+           sendMsg("HUMANSS", "zombie");
            return true;
         }
 
@@ -1047,7 +1029,7 @@ function Zombie()
             // check for wall
             if(checkForWall(x, y, direction, 1))
             {
-                console.log("zombie running into a wall, flipping directions");
+                sendMsg("zombie " + this + " ran into a wall, flipping directions", "debug");
                 this.flipDirection();
                 return;
             }
@@ -1058,7 +1040,7 @@ function Zombie()
                 if(moveRock(x, y, direction))
                 {
                     //push rock
-                    sendZombieMsg("zombie pushes a rock!!");
+                    sendMsg("zombie " + this + " pushes a rock!!", "debug");
                 }
                 else
                 {
@@ -1068,13 +1050,13 @@ function Zombie()
 
             if(checkForItem(x, y, direction, "zombie", 1))
             {
-                sendZombieMsg("Err.. zombies bump");
+                //sendZombieMsg("Err.. zombies bump");
                 this.flipDirection();
                 return;
             }
             
 
-            sendZombieMsg("moving" + direction);
+            //sendZombieMsg("moving" + direction);
             this.updateZombieLocation(x, y, direction);
             
             // update current cell with plains tile
@@ -1307,34 +1289,74 @@ function isWall(x, y)
     return wall;
 }
 
-
+// who can be = "zombie" or "player" or "event"
 // displays a message in the msg div tll next move
-function sendMsg(message)
+function sendMsg(message, who)
 {
-    // used to display messages to the user
-    var msg = document.getElementById("msg");
+    // setup message to have the correct font color based on who was passed
+    if(who === "zombie")
+    {
+        message = "z " + message;
+    }
+    if(who === "player")
+    {
+        message = "p " + message;
+    }
+    if(who === "event")
+    {
+        message = "e " + message;
+    }
+    if(who === "debug")
+    {
+        message = "**" + message;
+    }
 
-    msg.innerHTML = message;
+    // used to display messages to the user
+    var msg = document.getElementById("textLog");
+    
+    // makes the textarea auto scroll with content
+    msg.scrollTop = msg.scrollHeight - msg.clientHeight;
+     
+    msg.innerHTML += message + "\n";
 }
 
-function sendZombieMsg(message)
+function turnSound()
 {
-    var zmsg = document.getElementById("zmsg");
-    zmsg.innerHTML = message;
+    if(SOUND)
+    {
+        SOUND = false;
+        sendMsg("Sound Disabled", "event");
+    }
+    else
+    {
+        SOUND = true;
+        sendMsg("Sound Enabled", "event");
+    }
 }
 
-function clearMsg()
+function turnDebug()
 {
-    // used to display messages to the user
-    var msg = document.getElementById("msg");
+    if(DEBUG)
+    {
+        DEBUG = false;
+        sendMsg("Debug Disabled", "event");
+    }
+    else
+    {
+        DEBUG = true;
+        sendMsg("Debug Enabled", "event");
+    }
 
-    msg.innerHTML = "";
 }
 
 // checks if the cell is empty
 function isCellEmpty(direction, distance)
 {
-    sendMsg("direction : " + direction);
+    if(DEBUG)
+    {
+        sendMsg("Moving direction :" + direction, "debug");
+    }
+
     if(direction == NORTH)
     {
         y = modifyXY(player.yloc, direction, distance);
@@ -1361,7 +1383,7 @@ function isCellEmpty(direction, distance)
 
     if(isWall(x, y))
     {
-        sendMsg("Space not empty, wall tehre");
+        sendMsg("Space not empty, wall there", "event");
         empty = false;
         return empty;
     }
@@ -1374,14 +1396,14 @@ function isCellEmpty(direction, distance)
     }
     if(cell[0].className == "rock")
     {
-        sendMsg("Space not empty, rock tehre");
+        sendMsg("Space not empty, rock there", "event");
         //cell[0].className = "target";
         empty = false;
         return empty;
     }
     if(cell[0].className == "flower")
     {
-        sendMsg("Space not empty, flower tehre");
+        sendMsg("Space not empty, flower there", "event");
         //cell[0].className = "target";
         empty = false;
         return empty;
@@ -1410,21 +1432,24 @@ function moveRock(x, y, direction)
     // check to see if rock will hit wall
     if(checkForWall(x, y, direction, 1))
     {
-        sendMsg("HIT WALLLLLL");
+        sendMsg("Hitting a wall", "event");
         move = false;
         return move;
     }
     // check to see if another rock is in the way of pushing
     if(checkForItem(x, y, direction, "rock", 1))
     {
-        sendMsg("Something in the way");
+        sendMsg("Something in the way", "event");
         move = false;
         return move;
     }
     else
     {
         // play pushrock sound
-        playSound.pushRock.play();
+        if(SOUND)
+        {
+            playSound.pushRock.play();
+        }
 
         var oldRockCell = getCell(x, y);
         oldRockCell[0].className = "trail";
