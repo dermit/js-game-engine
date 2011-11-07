@@ -1306,9 +1306,12 @@ function sendMsg(message, who)
     {
         message = "e " + message;
     }
-    if(who === "debug")
+    if(who === "debug" && DEBUG)
     {
         message = "**" + message;
+    }else if(who === "debug")
+    {
+        return;
     }
 
     // used to display messages to the user
@@ -1318,6 +1321,19 @@ function sendMsg(message, who)
     msg.scrollTop = msg.scrollHeight - msg.clientHeight;
      
     msg.innerHTML += message + "\n";
+}
+
+function playSound(sound)
+{
+    if(SOUND)
+    {
+        playSound[sound].play();
+    }
+    else
+    {
+        return;
+    }
+
 }
 
 function turnSound()
