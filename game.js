@@ -26,7 +26,7 @@ var soundContainer = {
     hitRock  : new Audio("sounds/hitrock.wav"),
     jump     : new Audio("sounds/jump.wav"),
     pushRock : new Audio("sounds/pushrock.wav"),
-    hitzombie: new Audio("sounds/hitzombie.wav")
+    hitZombie: new Audio("sounds/hitzombie.wav")
 };
 
 // directionals
@@ -74,7 +74,7 @@ function keyDown(e) {
 		player.move(NORTH);
 
         //for(var x in zombies)
-        for(var x=0;x<=zombies.length;x++)
+        for(var x=0;x<zombies.length;x++)
         {
             zombies[x].updateZombies();
         }
@@ -84,7 +84,7 @@ function keyDown(e) {
     {
         player.move(WEST);
 
-        for(var x=0;x<=zombies.length;x++)
+        for(var x=0;x<zombies.length;x++)
         {
             zombies[x].updateZombies();
         }
@@ -94,7 +94,7 @@ function keyDown(e) {
     {
         player.move(SOUTH);
 
-        for(var x=0;x<=zombies.length;x++)
+        for(var x=0;x<zombies.length;x++)
         {
             zombies[x].updateZombies();
         }
@@ -104,7 +104,7 @@ function keyDown(e) {
     {
         player.move(EAST);
 
-        for(var x=0;x<=zombies.length;x++)
+        for(var x=0;x<zombies.length;x++)
         {
             zombies[x].updateZombies();
         }
@@ -309,6 +309,8 @@ function Player()
             this.incrementItem("flower");
         }
 
+
+
         // check for rock
         if(checkForItem(x, y, direction, "rock", 1))
         {
@@ -401,12 +403,13 @@ function Player()
                     var zx = x - 1;
                 }
 
+
                 for(var zombie=0; zombie<=zombies.length; zombie++)
                 {
                     if((zombies[zombie].yloc == zy && zombies[zombie].xloc == x) || (zombies[zombie].xloc == zx && zombies[zombie].yloc == y))
                     {
                         // hit zombie sound
-                        playSound(soundContainer.hitzombie);
+                        playSound(soundContainer.hitZombie);
 
 
                         // remove zombie from array
@@ -565,7 +568,6 @@ function Zombie()
         }
     };
 
-    // not currently used
     this.updateZombies = function()
     {
         this.changeFacingDirection();
@@ -1017,6 +1019,9 @@ function Zombie()
             // check for rock
             if(checkForItem(x, y, direction, "rock", 1))
             {
+                sendMsg("Zombie is trying to push a rock, nope", "debug");
+                return;
+                /*
                 if(moveRock(x, y, direction))
                 {
                     //push rock
@@ -1026,6 +1031,7 @@ function Zombie()
                 {
                     sendMsg("Cant move due to obstruction", "debug");
                 }
+                */
             }
 
             if(checkForItem(x, y, direction, "zombie", 1))
@@ -1452,8 +1458,33 @@ function moveRock(x, y, direction)
         move = false;
         return move;
     }
-    else
+
+    // check for zombie
+    if(checkForItem(x, y, direction, "zombie", 1))
     {
+        for(var zombie=0; zombie<zombies.length; zombie++)
+        {
+            if((zombies[zombie].yloc == y && zombies[zombie].xloc == x) || (zombies[zombie].xloc == x && zombies[zombie].yloc == y))
+            {
+                // hit zombie sound
+                playSound(soundContainer.hitZombie);
+
+
+                // remove zombie from array
+                zombies.splice(zombie, 1);
+
+                // send msg
+                sendMsg("You killed a zombie.", "event");
+
+                // replace zombie with plains tile
+                var cell = getNextCell(x, y, direction);
+                cell[0].className = "plains";
+            }
+        }
+    }
+    
+    //else
+    //{
         // play pushrock sound
         playSound(soundContainer.pushRock);
 
@@ -1464,7 +1495,7 @@ function moveRock(x, y, direction)
         newRockCell[0].className = "rock";
 
         return move;
-    }
+    //}
 }
 
 // get cell usign the x, y
