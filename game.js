@@ -1469,7 +1469,7 @@ function moveRock(x, y, direction)
                 // hit zombie sound
                 playSound(soundContainer.hitZombie);
 
-
+                sendMsg("Killing zombie " + zombies[zombie], "debug");
                 // remove zombie from array
                 zombies.splice(zombie, 1);
 
@@ -1477,8 +1477,8 @@ function moveRock(x, y, direction)
                 sendMsg("You killed a zombie.", "event");
 
                 // replace zombie with plains tile
-                var cell = getNextCell(x, y, direction);
-                cell[0].className = "plains";
+                //var cell = getNextCell(x, y, direction);
+                //cell[0].className = "plains";
             }
         }
     }
@@ -1488,8 +1488,8 @@ function moveRock(x, y, direction)
         // play pushrock sound
         playSound(soundContainer.pushRock);
 
-        var oldRockCell = getCell(x, y);
-        oldRockCell[0].className = "trail";
+        //var oldRockCell = getCell(x, y);
+        //oldRockCell[0].className = "trail";
 
         var newRockCell = getNextCell(x, y, direction);
         newRockCell[0].className = "rock";
