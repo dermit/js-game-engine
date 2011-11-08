@@ -31,8 +31,8 @@
         "p" to plant a flower<br>
 
         <br><br>
-        <button id="sound" onclick="turnSound()">Sound on/off</button><br>
-        <button id="debug" onclick="turnDebug()">Debug on/off</button>
+        <button id="sound" onclick="turnSound()">Sound : OFF</button><br>
+        <button id="debug" onclick="turnDebug()">Debug : OFF</button>
         <span id="msg"></span>
         <br />
         <span id="zmsg"></span>

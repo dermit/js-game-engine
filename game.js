@@ -1323,11 +1323,17 @@ function turnSound()
     {
         SOUND = false;
         sendMsg("Sound Disabled", "event");
+
+        var btn = document.getElementById("sound");
+        btn.innerHTML = "Sound : OFF";
     }
     else
     {
         SOUND = true;
         sendMsg("Sound Enabled", "event");
+
+        var btn = document.getElementById("sound");
+        btn.innerHTML = "Sound : ON";
     }
 }
 
@@ -1338,11 +1344,17 @@ function turnDebug()
     {
         DEBUG = false;
         sendMsg("Debug Disabled", "event");
+
+        var btn = document.getElementById("debug");
+        btn.innerHTML = "Debug : OFF";
     }
     else
     {
         DEBUG = true;
         sendMsg("Debug Enabled", "event");
+
+        var btn = document.getElementById("debug");
+        btn.innerHTML = "Debug : ON";
     }
 
 }
@@ -1350,10 +1362,9 @@ function turnDebug()
 // checks if the cell is empty
 function isCellEmpty(direction, distance)
 {
-    if(DEBUG)
-    {
-        sendMsg("Moving direction :" + direction, "debug");
-    }
+   
+    sendMsg("Moving direction :" + direction, "debug");
+
 
     if(direction == NORTH)
     {
@@ -1444,10 +1455,7 @@ function moveRock(x, y, direction)
     else
     {
         // play pushrock sound
-        if(SOUND)
-        {
-            playSound.pushRock.play();
-        }
+        playSound(soundContainer.pushRock);
 
         var oldRockCell = getCell(x, y);
         oldRockCell[0].className = "trail";

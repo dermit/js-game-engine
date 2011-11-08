@@ -4,6 +4,7 @@
     <list default="true" id="b1aa94f5-22ac-4fdc-a162-c637a23e6b2f" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/game.js" afterPath="$PROJECT_DIR$/game.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.php" afterPath="$PROJECT_DIR$/main.php" />
     </list>
     <ignored path="board2.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -29,7 +30,7 @@
       <file leaf-file-name="game.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/game.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="565" column="6" selection-start="13252" selection-end="13252" vertical-scroll-proportion="0.15419161">
+            <state line="1327" column="38" selection-start="32081" selection-end="32081" vertical-scroll-proportion="-0.76334774">
               <folding />
             </state>
           </provider>
@@ -38,7 +39,7 @@
       <file leaf-file-name="main.php" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="34" column="45" selection-start="996" selection-end="1005" vertical-scroll-proportion="0.0">
+            <state line="34" column="60" selection-start="1019" selection-end="1019" vertical-scroll-proportion="-8.5">
               <folding />
             </state>
           </provider>
@@ -69,8 +70,8 @@
       <list>
         <option value="$PROJECT_DIR$/dead.php" />
         <option value="$PROJECT_DIR$/style.css" />
-        <option value="$PROJECT_DIR$/main.php" />
         <option value="$PROJECT_DIR$/game.js" />
+        <option value="$PROJECT_DIR$/main.php" />
       </list>
     </option>
   </component>
@@ -100,6 +101,7 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="Favorites" />
       <pane id="ProjectPane">
         <subPane>
@@ -121,15 +123,14 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="WebServerToolWindowFactoryState" value="true" />
     <property name="options.lastSelected" value="web.server" />
-    <property name="options.searchVisible" value="true" />
     <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="options.searchVisible" value="true" />
   </component>
   <component name="PublishConfig" serverName="js-game-engine" serverId="88fdfe5c-e729-44fa-8944-9b592bc8b114">
     <servers>
@@ -233,10 +234,10 @@
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.22207084" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Phing Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.23364486" sideWeight="0.58038145" order="1" side_tool="true" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.23723939" sideWeight="0.58446866" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Remote Host" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.23364486" sideWeight="0.40871936" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.23723939" sideWeight="0.40463215" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32833788" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -276,7 +277,7 @@
     <option name="CHECK_COMMIT_MESSAGE_SPELLING" value="true" />
     <option name="DEFAULT_PATCH_EXTENSION" value="patch" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="rewriting the playSound functions" />
+    <option name="LAST_COMMIT_MESSAGE" value="updated the soundContainer object &amp; replaced all of the old playSound.name.play(); into playSound(soundContainer.name);&#10;Removed all of the if DEBUG &amp; if SOUNDs and put that logic inside the functions themselves.&#10;added this.getVision(); to the updateZombies function but it doesnt seem to be working correctly." />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -303,6 +304,7 @@
     <MESSAGE value="workspace" />
     <MESSAGE value="added textarea box and modified all the sendMsg() type functions, removing the zombie and clear ones. now you can do a sendMsg(msg, who);" />
     <MESSAGE value="rewriting the playSound functions" />
+    <MESSAGE value="updated the soundContainer object &amp; replaced all of the old playSound.name.play(); into playSound(soundContainer.name);&#10;Removed all of the if DEBUG &amp; if SOUNDs and put that logic inside the functions themselves.&#10;added this.getVision(); to the updateZombies function but it doesnt seem to be working correctly." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -323,19 +325,21 @@
         <state line="11" column="0" selection-start="205" selection-end="205" vertical-scroll-proportion="0.1203966" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="34" column="45" selection-start="996" selection-end="1005" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/style.css">
       <provider selected="true" editor-type-id="text-editor">
         <state line="24" column="18" selection-start="379" selection-end="379" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/main.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="34" column="60" selection-start="1019" selection-end="1019" vertical-scroll-proportion="-8.5">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/game.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="565" column="6" selection-start="13252" selection-end="13252" vertical-scroll-proportion="0.15419161">
+        <state line="1327" column="38" selection-start="32081" selection-end="32081" vertical-scroll-proportion="-0.76334774">
           <folding />
         </state>
       </provider>
