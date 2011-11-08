@@ -22,7 +22,7 @@ var NUM_OF_ENEMIES = 5;
 var zombies = new Array();
 
 // sounds object
-var playSound = {
+var soundContainer = {
     hitRock  : new Audio("sounds/hitrock.wav"),
     jump     : new Audio("sounds/jump.wav"),
     pushRock : new Audio("sounds/pushrock.wav"),
@@ -244,7 +244,7 @@ function Player()
             // play jump sound
             if(SOUND)
             {
-                playSound.jump.play();
+                playSound(soundContainer.jump);
             }
 
             // update current cell with plains tile
@@ -319,11 +319,7 @@ function Player()
             }
             else
             {
-                // cant move rock due to obstruction
-                if(DEBUG)
-                {
-                    sendMsg("Can't move rock due to obstruction", "event");
-                }
+                sendMsg("Can't move rock due to obstruction", "event");
                 return;
             }
         }
@@ -379,10 +375,7 @@ function Player()
             // check for rock
             if(checkForItem(x, y, direction, "rock", 1))
             {
-                if(SOUND)
-                {
-                    playSound.hitRock.play();
-                }
+                playSound(soundContainer.hitRock);
                 
                 sendMsg("You hit a rock with your sword", "player");
                 return;
@@ -413,10 +406,8 @@ function Player()
                     if((zombies[zombie].yloc == zy && zombies[zombie].xloc == x) || (zombies[zombie].xloc == zx && zombies[zombie].yloc == y))
                     {
                         // hit zombie sound
-                        if(SOUND)
-                        {
-                            playSound.hitzombie.play();
-                        }
+                        playSound(soundContainer.hitzombie);
+
 
                         // remove zombie from array
                         zombies.splice(zombie, 1);
@@ -579,6 +570,7 @@ function Zombie()
     {
         this.changeFacingDirection();
         this.move();
+        this.getVision();
 
         this.spawnNewZombie();
         //this.clearVisionTiles();
@@ -624,40 +616,28 @@ function Zombie()
 
             if(newDirection == 1)
             {
-                if(DEBUG)
-                {
-                    sendMsg("zombie " + this + " is changing direction to north", "debug");
-                }
+                sendMsg("zombie " + this + " is changing direction to north", "debug");
 
                 this.updateZombieDirection(NORTH);
                 return;
             }
             if(newDirection == 2)
             {
-                if(DEBUG)
-                {
-                    sendMsg("zombie " + this + " is changing direction to east", "debug");
-                }
+                sendMsg("zombie " + this + " is changing direction to east", "debug");
 
                 this.updateZombieDirection(EAST);
                 return;
             }
             if(newDirection == 3)
             {
-                if(DEBUG)
-                {
-                    sendMsg("zombie " + this + " is changing direction to south", "debug");
-                }
+                sendMsg("zombie " + this + " is changing direction to south", "debug");
 
                 this.updateZombieDirection(SOUTH);
                 return;
             }
             if(newDirection == 4)
             {
-                if(DEBUG)
-                {
-                    sendMsg("zombie " + this + " is changing direction to west", "debug");
-                }
+                sendMsg("zombie " + this + " is changing direction to west", "debug");
 
                 this.updateZombieDirection(WEST);
                 return;
@@ -1040,17 +1020,17 @@ function Zombie()
                 if(moveRock(x, y, direction))
                 {
                     //push rock
-                    sendMsg("zombie " + this + " pushes a rock!!", "debug");
+                    sendMsg("zombie at x:" + this.xloc  + " y: " + this.yloc + "pushes a rock!!", "debug");
                 }
                 else
                 {
-                    // cant move due to obsruction, wall/rock
+                    sendMsg("Cant move due to obstruction", "debug");
                 }
             }
 
             if(checkForItem(x, y, direction, "zombie", 1))
             {
-                //sendZombieMsg("Err.. zombies bump");
+                sendMsg("Err.. zombies bump", "debug");
                 this.flipDirection();
                 return;
             }
@@ -1323,19 +1303,20 @@ function sendMsg(message, who)
     msg.innerHTML += message + "\n";
 }
 
+// function to play sound  ex: playSound(soundContainer.jump);
 function playSound(sound)
 {
     if(SOUND)
     {
-        playSound[sound].play();
+        sound.play();
     }
     else
     {
         return;
     }
-
 }
 
+// turns the global sound on or off
 function turnSound()
 {
     if(SOUND)
@@ -1350,6 +1331,7 @@ function turnSound()
     }
 }
 
+// turns the global debug on or off
 function turnDebug()
 {
     if(DEBUG)
